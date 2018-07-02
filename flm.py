@@ -106,8 +106,8 @@ def interpolateArray(array):
     array
         numpy array with midpoints
     """
-    dim = array.ndim
-    n = np.rint(np.power(array.size, 1.0 / float(dim)))
+    dim = int(array.ndim)
+    n = int(np.rint(np.power(array.size, 1.0 / float(dim))))
 
     orig = array
     array = np.zeros(shape = [2 * n - 1] * dim)
