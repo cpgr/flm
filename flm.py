@@ -170,7 +170,7 @@ def flm(alpha, H, n, dim=1, nm=50, max=10, progress=False):
 
     # Begin by adding L(alpha) to the endpoints/cornerpoints
     array = np.zeros(shape=[2] * dim)
-    addLevy(array, alpha, 1, max, dim)
+    addLevy(array, alpha, 1, max)
 
     # Increase the length of the array by interpolating to add midpoints
     for i in range(0,n):
@@ -178,7 +178,7 @@ def flm(alpha, H, n, dim=1, nm=50, max=10, progress=False):
 
         # Add random Levy numbers with width delta
         d = delta(alpha, H, i)
-        addLevy(array, alpha, d, max, dim)
+        addLevy(array, alpha, d, max)
 
         if progress:
             print "Generated level ", i + 1
@@ -186,7 +186,7 @@ def flm(alpha, H, n, dim=1, nm=50, max=10, progress=False):
     # Add more random variables
     for k in range(n, nm):
         d = delta(alpha, H, k)
-        addLevy(array, alpha, d, max, dim)
+        addLevy(array, alpha, d, max)
 
         if progress:
             print "Adding additional random numbers ", k + 1
