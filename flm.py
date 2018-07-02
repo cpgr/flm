@@ -56,7 +56,7 @@ def delta(alpha, H, n):
     """
     return (1 - np.power(2.0, alpha * H) / np.power(2.0, alpha)) / np.power(2.0, n * alpha * H)
 
-def addLevy(array, alpha, d, max, dim):
+def addLevy(array, alpha, d, max):
     """
     Add a random Levy number to each element in an array
 
@@ -73,20 +73,15 @@ def addLevy(array, alpha, d, max, dim):
         Width delta
     max : float
         Maximum of absolute value of Levy random number
-    dim: int
-        Dimension of array
 
     Returns
     -------
     float
         Modifies array in place
     """
-    if dim == 1:
-        for i in np.arange(0, array.size):
-            array[i] += d * np.power(0.5, 1.0 / alpha) * truncatedLevy(alpha, max)
-    else:
-        for arr in array:
-            addLevy(arr, alpha, d, max, dim-1)
+    lvy = [d * np.power(0.5, 1.0 / alpha) * truncatedLevy(alpha, max) for i in range(array.size)]
+    lvy = np.asarray(lvy).reshape(array.shape)
+    array += lvy
 
 def interpolateArray(array):
     """
@@ -143,7 +138,7 @@ def interpolateArray(array):
 
     return array
 
-def flm(alpha, H, n, dim=1, nm=50, max=10):
+def flm(alpha, H, n, dim=1, nm=50, max=10, progress=False):
     """
     Generates an array of fractional Levy motion of size 2**n + 1
     in each dimesion
@@ -162,6 +157,8 @@ def flm(alpha, H, n, dim=1, nm=50, max=10):
         Number of additional random Levy numbers to add. Default is 50
     max: float
         Maximum absolute value of random number sampled. Default is 10
+    progress:  bool
+        Whether to print out an indication of progress. Default is false
 
     Returns
     -------
@@ -183,9 +180,15 @@ def flm(alpha, H, n, dim=1, nm=50, max=10):
         d = delta(alpha, H, i)
         addLevy(array, alpha, d, max, dim)
 
+        if progress:
+            print "Generated level ", i + 1
+
     # Add more random variables
     for k in range(n, nm):
         d = delta(alpha, H, k)
         addLevy(array, alpha, d, max, dim)
+
+        if progress:
+            print "Adding additional random numbers ", k + 1
 
     return array
