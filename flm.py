@@ -83,7 +83,7 @@ def addLevy(array, alpha, d, max, dim):
     """
     if dim == 1:
         for i in np.arange(0, array.size):
-            array[i] += d * truncatedLevy(alpha, max)
+            array[i] += d * np.power(0.5, 1.0 / alpha) * truncatedLevy(alpha, max)
     else:
         for arr in array:
             addLevy(arr, alpha, d, max, dim-1)
